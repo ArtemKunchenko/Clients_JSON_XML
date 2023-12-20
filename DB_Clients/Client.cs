@@ -6,6 +6,7 @@
         public string Name { get; set; }
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
+        public Client() { }
         public Client(int id, string name, string lastName, string phoneNumber)
         {
             Id = id;

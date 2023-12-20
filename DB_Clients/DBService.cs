@@ -16,9 +16,85 @@ namespace DB_Clients
         public DBService()
         {
             DataBase = new List<T>();
-            pathJSON = Environment.CurrentDirectory + @"\db.json";
-            pathXML = Environment.CurrentDirectory + @"\db.xml";
+            //pathXML = Environment.CurrentDirectory + @"\db.json";
+            pathJSON = @"D:\Files\db.json";
+            //pathXML = Environment.CurrentDirectory + @"\db.xml";
+            pathXML = @"D:\Files\db.xml";
         }
-        
+        private void SaveJSONFile()
+        {
+            string json = JsonSerializer.Serialize(DataBase);
+            if (File.Exists(pathJSON))
+            {
+                try
+                {
+                    File.Delete(pathJSON);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            try
+            {
+                var file = File.Create(pathJSON);
+                file.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            File.AppendAllText(pathJSON, json);
+            //File.AppendAllLines(pathJSON, json.Split(','));
+
+        }
+        private void SaveXMLFile()
+        {
+            if (File.Exists(pathXML))
+            {
+                try
+                {
+                    File.Delete(pathXML);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<T>));
+            using (FileStream fs = new FileStream(pathXML, FileMode.OpenOrCreate))
+            {
+                xmlSerializer.Serialize(fs, DataBase);
+                fs.Dispose();
+            }
+
+        }
+        public void AddItem(T item)
+        {
+            DataBase.Add(item);
+            SaveJSONFile();
+            SaveXMLFile();
+        }
+
+        public void UpdateItem(int index, T newItem)
+        {
+            if (index >= 0 && index < DataBase.Count)
+            {
+                DataBase[index]=newItem;
+                SaveJSONFile();
+                SaveXMLFile();
+            }
+
+        }
+        public void DeleteItem(int index)
+        {
+            if (index >= 0 && index < DataBase.Count)
+            {
+                DataBase.Remove(DataBase[index]);
+                SaveJSONFile();
+                SaveXMLFile();
+            }
+
+        }
     }
 }
