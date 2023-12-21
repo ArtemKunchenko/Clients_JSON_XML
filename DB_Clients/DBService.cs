@@ -39,6 +39,7 @@ namespace DB_Clients
             {
                 var file = File.Create(pathJSON);
                 file.Close();
+                 
             }
             catch (Exception ex)
             {
@@ -75,7 +76,24 @@ namespace DB_Clients
             SaveJSONFile();
             SaveXMLFile();
         }
-
+        public List<T> GetFromJSON()
+        {
+            string data=File.ReadAllText(pathJSON);
+            List<T> dataJSON = new List<T>();
+            dataJSON=JsonSerializer.Deserialize<List<T>>(data);
+            return DataBase;
+        }
+        public List<T> GetFromXML()
+        {
+            List<T> dataXML= new List<T>();
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<T>));
+            using (FileStream fs = new FileStream(pathXML, FileMode.Open))
+            {
+                dataXML = xmlSerializer.Deserialize(fs) as List<T>;
+                fs.Dispose();
+            }
+            return dataXML;
+        }
         public void UpdateItem(int index, T newItem)
         {
             if (index >= 0 && index < DataBase.Count)

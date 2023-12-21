@@ -1,5 +1,6 @@
 ﻿using DB_Clients;
 using Microsoft.VisualBasic;
+using System.Text.Json;
 
 namespace Clients_JSON_XML
 {
@@ -17,8 +18,17 @@ namespace Clients_JSON_XML
             db.AddItem(client3);
             //db.DeleteItem(2);
             //db.UpdateItem(0, client4);
-
-
+            List<Client> clientsFromJSON=db.GetFromJSON();
+            foreach (var client in clientsFromJSON)
+            {
+               Console.WriteLine(client);
+            }
+            Console.WriteLine("--------------------------------------------------");
+            List<Client> clientsFromXML=db.GetFromXML();
+            foreach (var client in clientsFromJSON)
+            {
+                Console.WriteLine(client);
+            }
         }
     }
 }

@@ -17,7 +17,7 @@
         }
         public override string ToString()
         {
-            return $"ID: {Id} {Name}{LastName}\t Phone number: {PhoneNumber}";
+            return $"ID: {Id} {Name} {LastName}\t Phone number: {PhoneNumber}";
         }
 
     }
